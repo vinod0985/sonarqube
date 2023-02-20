@@ -7,13 +7,15 @@ pipeline {
       steps {
         ansiColor('x-term') {
           script {
-            dir("maven-1") {
-                docker.image("sonarqube:v1").inside(){
+            dir("sonar-scm") {
+              docker.withRegistry('https://registry.hub.docker.com', 'demo') {
+                docker.image("magalam87/sonar-scanner:v1").inside(){
                 withSonarQubeEnv('sonarqube'){
                   sh """
 		      ls -lrt
                       sonar-scanner -Dproject.setting=./sonar-project.properties
                       """;
+                }
                 }
               }
             }
